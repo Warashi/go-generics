@@ -52,7 +52,7 @@ func (s *ArrayStack[T]) Add(i int, x T) error {
 		s.array[j] = s.array[j-1]
 	}
 	s.array[i] = x
-  return nil
+	return nil
 }
 
 func (s *ArrayStack[T]) Remove(i int) (T, error) {
@@ -71,12 +71,12 @@ func (s *ArrayStack[T]) Remove(i int) (T, error) {
 }
 
 func (s *ArrayStack[T]) Push(x T) {
-  // never occur ErrIndexOutOfRange, so we can ignore error
-  _ = s.Add(s.length, x)
+	// never occur ErrIndexOutOfRange, so we can ignore error
+	_ = s.Add(s.length, x)
 }
 
 func (s *ArrayStack[T]) Pop() T {
-  // never occur ErrIndexOutOfRange, so we can ignore error
-  v, _ := s.Remove(s.length-1)
-  return v
+	// never occur ErrIndexOutOfRange, so we can ignore error
+	v, _ := s.Remove(s.length - 1)
+	return v
 }
