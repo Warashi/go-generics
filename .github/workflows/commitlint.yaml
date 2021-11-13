@@ -17,7 +17,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-
       - run: npm ci
-      - uses: wagoid/commitlint-github-action@v4
+      - run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}
         env:
           NODE_PATH: ${{ github.workspace }}/node_modules
 
