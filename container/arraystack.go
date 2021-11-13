@@ -15,7 +15,9 @@ type ArrayStack[T any] struct {
 
 func (s *ArrayStack[T]) resize() {
 	n := make([]T, 2*s.length)
-	copy(n[:s.length], s.array[:s.length])
+	if s.array != nil {
+		copy(n[:s.length], s.array[:s.length])
+	}
 	s.array = n
 }
 
@@ -38,7 +40,11 @@ func (s *ArrayStack[T]) Set(i int, x T) error {
 	return nil
 }
 
-func (s *ArrayStack[T]) Add(i int, x T) {
+func (s *ArrayStack[T]) Add(i int, x T) error {
+	if i < 0 || s.length < i {
+		return ErrIndexOutOfRange
+	}
+	s.length++
 	if len(s.array) <= s.length+1 {
 		s.resize()
 	}
@@ -46,10 +52,13 @@ func (s *ArrayStack[T]) Add(i int, x T) {
 		s.array[j] = s.array[j-1]
 	}
 	s.array[i] = x
-	s.length++
+  return nil
 }
 
-func (s *ArrayStack[T]) Remove(i int) T {
+func (s *ArrayStack[T]) Remove(i int) (T, error) {
+	if i < 0 || s.length <= i {
+		return zero.New[T](), ErrIndexOutOfRange
+	}
 	ret := s.array[i]
 	for j := i; j < s.length-1; j++ {
 		s.array[j] = s.array[j+1]
@@ -58,5 +67,16 @@ func (s *ArrayStack[T]) Remove(i int) T {
 	if 3*s.length < len(s.array) {
 		s.resize()
 	}
-	return ret
+	return ret, nil
+}
+
+func (s *ArrayStack[T]) Push(x T) {
+  // never occur ErrIndexOutOfRange, so we can ignore error
+  _ = s.Add(s.length, x)
+}
+
+func (s *ArrayStack[T]) Pop() T {
+  // never occur ErrIndexOutOfRange, so we can ignore error
+  v, _ := s.Remove(s.length-1)
+  return v
 }
