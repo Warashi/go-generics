@@ -1,0 +1,11 @@
+name: Test
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup go
+        run: curl -sL https://raw.githubusercontent.com/maxatome/install-go/v3.0/install-go.pl | perl - tip $HOME/go
+      - uses: actions/checkout@v2
+      - run: go test ./...
