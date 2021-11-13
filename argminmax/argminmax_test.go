@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/Warashi/go-algorithms/argminmax"
+	"github.com/Warashi/go-generics/argminmax"
 )
 
 func TestArgMax(t *testing.T) {

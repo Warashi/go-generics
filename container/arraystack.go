@@ -3,7 +3,7 @@ package container
 import (
 	"errors"
 
-	"github.com/Warashi/go-algorithms/zero"
+	"github.com/Warashi/go-generics/zero"
 )
 
 var ErrIndexOutOfRange = errors.New("index out of range")
