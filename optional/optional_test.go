@@ -19,12 +19,12 @@ func TestOptional_IsEmpty(t *testing.T) {
 		},
 		{
 			name:  "zero",
-			value: pointer.New(0),
+			value: pointer.Of(0),
 			want:  false,
 		},
 		{
 			name:  "non-zero",
-			value: pointer.New(1),
+			value: pointer.Of(1),
 			want:  false,
 		},
 	}
