@@ -1,6 +1,7 @@
 package optional
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/Warashi/go-generics/pointer"
@@ -36,4 +37,37 @@ func TestOptional_IsEmpty(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestOptional_MapOrElseZero(t *testing.T) {
+	mapper := MapperFunc[int, string](strconv.Itoa)
+	tests := []struct {
+		name  string
+		value *int
+		want  string
+	}{
+		{
+			name:  "empty",
+			value: nil,
+		},
+		{
+			name:  "zero",
+			value: pointer.Of(0),
+			want:  "0",
+		},
+		{
+			name:  "non-zero",
+			value: pointer.Of(1),
+			want:  "1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := Map[int, string](Optional[int]{value: tt.value}, mapper)
+			if got := o.OrElseZero(); got != tt.want {
+				t.Errorf("OrElseZero() = %v, want = %v", got, tt.want)
+			}
+		})
+	}
+
 }
