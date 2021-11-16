@@ -75,8 +75,6 @@ func (s *ArrayStack[T]) Push(x T) {
 	_ = s.Add(s.length, x)
 }
 
-func (s *ArrayStack[T]) Pop() T {
-	// never occur ErrIndexOutOfRange, so we can ignore error
-	v, _ := s.Remove(s.length - 1)
-	return v
+func (s *ArrayStack[T]) Pop() (T, error) {
+	return s.Remove(s.length - 1)
 }
