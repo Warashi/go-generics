@@ -28,4 +28,21 @@ func TestArrayStack(t *testing.T) {
 			t.Errorf("s.Pop() returned error %v, wantErr %v", err, true)
 		}
 	})
+	t.Run("Set-Get", func(t *testing.T) {
+		s := container.ArrayStack[int]{}
+		for i := 0; i < 5; i++ {
+			s.Push(0)
+		}
+		for i := 0; i < 5; i++ {
+			s.Set(i, i)
+			got, err := s.Get(i)
+			if err != nil {
+				t.Errorf("s.Get() returned error %v, wantErr %v", err, false)
+			}
+			want := i
+			if got != want {
+				t.Errorf("s.Get() = %v, want %v", got, want)
+			}
+		}
+	})
 }
