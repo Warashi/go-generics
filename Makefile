@@ -14,5 +14,5 @@ commit:
 
 .PHONY: merge
 merge:
-	gh pr create
+	gh pr create --fill
 	gh pr merge --auto --merge
