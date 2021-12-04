@@ -10,6 +10,10 @@ type ArrayDequeue[T any] struct {
 	array         []T
 }
 
+func (q *ArrayDequeue[T]) Size() int {
+	return q.length
+}
+
 func (q *ArrayDequeue[T]) Get(i int) (T, error) {
 	if i < 0 || q.length <= i {
 		return zero.New[T](), ErrIndexOutOfRange
