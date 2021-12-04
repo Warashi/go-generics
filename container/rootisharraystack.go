@@ -17,7 +17,7 @@ func (s *RootishArrayStack[T]) Size() int {
 }
 
 func (*RootishArrayStack[T]) iToBlock(i int) int {
-	return int(math.Ceil(-3 + math.Sqrt(9+8*float64(i))/2))
+	return int(math.Ceil(-3+math.Sqrt(9+8*float64(i))) / 2)
 }
 
 func (s *RootishArrayStack[T]) Get(i int) (T, error) {
