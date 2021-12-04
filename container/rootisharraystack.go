@@ -16,19 +16,20 @@ func (s *RootishArrayStack[T]) Size() int {
 	return s.length
 }
 
-func (*RootishArrayStack[T]) iToBlock(i int) int {
-	return int(math.Ceil(-3 + math.Sqrt(9+8*float64(i))/2))
+func (*RootishArrayStack[T]) iToBlock(i int) (block int, index int) {
+	block = int(math.Ceil((-3 + math.Sqrt(9+8*float64(i))) / 2))
+	index = i - (block)*(block+1)/2
+	return
 }
 
 func (s *RootishArrayStack[T]) Get(i int) (T, error) {
 	if i < 0 || s.length <= i {
 		return zero.New[T](), ErrIndexOutOfRange
 	}
-	b := s.iToBlock(i)
-	j := i - b*(b+1)/2
-	block, err := s.blocks.Get(j)
+	b, j := s.iToBlock(i)
+	block, err := s.blocks.Get(b)
 	if err != nil {
-		return zero.New[T](), fmt.Errorf("s.blocks.Get(%d): %w", j, err)
+		return zero.New[T](), fmt.Errorf("s.blocks.Get(%d): %w", b, err)
 	}
 	return block[j], nil
 }
@@ -37,11 +38,10 @@ func (s *RootishArrayStack[T]) Set(i int, x T) (T, error) {
 	if i < 0 || s.length <= i {
 		return zero.New[T](), ErrIndexOutOfRange
 	}
-	b := s.iToBlock(i)
-	j := i - b*(b+1)/2
-	block, err := s.blocks.Get(j)
+	b, j := s.iToBlock(i)
+	block, err := s.blocks.Get(b)
 	if err != nil {
-		return zero.New[T](), fmt.Errorf("s.blocks.Get(%d): %w", j, err)
+		return zero.New[T](), fmt.Errorf("s.blocks.Get(%d): %w", b, err)
 	}
 	y := block[j]
 	block[j] = x
