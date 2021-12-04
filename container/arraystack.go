@@ -13,6 +13,10 @@ type ArrayStack[T any] struct {
 	array  []T
 }
 
+func (s *ArrayStack[T]) Size() int {
+	return s.length
+}
+
 func (s *ArrayStack[T]) resize() {
 	n := make([]T, 2*s.length)
 	if s.array != nil {

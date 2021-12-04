@@ -10,6 +10,10 @@ type ArrayQueue[T any] struct {
 	array         []T
 }
 
+func (q *ArrayQueue[T]) Size() int {
+	return q.length
+}
+
 func (q *ArrayQueue[T]) resize() {
 	n := make([]T, minmax.Max(1, 2*q.length))
 	if q.array != nil {
