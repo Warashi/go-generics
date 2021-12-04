@@ -1,4 +1,4 @@
-package argminmax
+package minmax
 
 import (
 	"constraints"

@@ -1,11 +1,11 @@
-package argminmax_test
+package minmax_test
 
 import (
 	"math/rand"
 	"strconv"
 	"testing"
 
-	"github.com/Warashi/go-generics/argminmax"
+	"github.com/Warashi/go-generics/minmax"
 )
 
 func TestArgMax(t *testing.T) {
@@ -30,7 +30,7 @@ func TestArgMax(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := argminmax.ArgMax(tt.args.data); got != tt.want {
+			if got := minmax.ArgMax(tt.args.data); got != tt.want {
 				t.Errorf("ArgMax() = %v, want %v", got, tt.want)
 			}
 		})
@@ -59,7 +59,7 @@ func TestArgMin(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := argminmax.ArgMin(tt.args.data); got != tt.want {
+			if got := minmax.ArgMin(tt.args.data); got != tt.want {
 				t.Errorf("ArgMin() = %v, want %v", got, tt.want)
 			}
 		})
@@ -79,7 +79,7 @@ func BenchmarkArgMin(b *testing.B) {
 				b.StopTimer()
 				rand.Shuffle(len(list), func(i, j int) { list[i], list[j] = list[j], list[i] })
 				b.StartTimer()
-				a := argminmax.ArgMin(list)
+				a := minmax.ArgMin(list)
 				_ = a
 			}
 		})
@@ -99,7 +99,7 @@ func BenchmarkArgMax(b *testing.B) {
 				b.StopTimer()
 				rand.Shuffle(len(list), func(i, j int) { list[i], list[j] = list[j], list[i] })
 				b.StartTimer()
-				a := argminmax.ArgMax(list)
+				a := minmax.ArgMax(list)
 				_ = a
 			}
 		})
