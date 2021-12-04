@@ -19,7 +19,7 @@ func (s *ArrayStack[T]) Size() int {
 
 func (s *ArrayStack[T]) resize() {
 	n := make([]T, 2*s.length)
-	if s.array != nil {
+	if len(s.array) > 0 {
 		copy(n[:s.length], s.array[:s.length])
 	}
 	s.array = n
