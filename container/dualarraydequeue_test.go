@@ -7,7 +7,7 @@ import (
 )
 
 func TestDualArrayDequeue(t *testing.T) {
-	t.Run("Push-Pop/Front", func(t *testing.T) {
+	t.Run("Push-Pop/Front-Front", func(t *testing.T) {
 		s := container.DualArrayDequeue[int]{}
 		for i := 0; i < 5; i++ {
 			s.PushFront(i)
@@ -22,7 +22,37 @@ func TestDualArrayDequeue(t *testing.T) {
 			}
 		}
 	})
-	t.Run("Push-Pop/Back", func(t *testing.T) {
+	t.Run("Push-Pop/Back-Front", func(t *testing.T) {
+		s := container.DualArrayDequeue[int]{}
+		for i := 0; i < 5; i++ {
+			s.PushBack(i)
+		}
+		for i := 0; i < 5; i++ {
+			got, err := s.PopFront()
+			if err != nil {
+				t.Errorf("s.PopBack() returned error %v, wantErr %v", err, false)
+			}
+			if got != i {
+				t.Errorf("s.PopBack() = %d, want %d", got, i)
+			}
+		}
+	})
+	t.Run("Push-Pop/Front-Back", func(t *testing.T) {
+		s := container.DualArrayDequeue[int]{}
+		for i := 0; i < 5; i++ {
+			s.PushFront(i)
+		}
+		for i := 0; i < 5; i++ {
+			got, err := s.PopBack()
+			if err != nil {
+				t.Errorf("s.PopFront() returned error %v, wantErr %v", err, false)
+			}
+			if got != i {
+				t.Errorf("s.PopFront() = %d, want %d", got, i)
+			}
+		}
+	})
+	t.Run("Push-Pop/Back-Back", func(t *testing.T) {
 		s := container.DualArrayDequeue[int]{}
 		for i := 0; i < 5; i++ {
 			s.PushBack(i)
