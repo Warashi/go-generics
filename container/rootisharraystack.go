@@ -17,7 +17,7 @@ func (s *RootishArrayStack[T]) Size() int {
 }
 
 func (*RootishArrayStack[T]) iToBlock(i int) int {
-	return int(math.Ceil(-3 * math.Sqrt(9+8*float64(i)) / 2))
+	return int(math.Ceil(-3 + math.Sqrt(9+8*float64(i))/2))
 }
 
 func (s *RootishArrayStack[T]) Get(i int) (T, error) {
@@ -28,7 +28,7 @@ func (s *RootishArrayStack[T]) Get(i int) (T, error) {
 	j := i - b*(b+1)/2
 	block, err := s.blocks.Get(j)
 	if err != nil {
-		return zero.New[T](), fmt.Errorf("s.blocks.Get(i): %w", err)
+		return zero.New[T](), fmt.Errorf("s.blocks.Get(%d): %w", j, err)
 	}
 	return block[j], nil
 }
@@ -41,7 +41,7 @@ func (s *RootishArrayStack[T]) Set(i int, x T) (T, error) {
 	j := i - b*(b+1)/2
 	block, err := s.blocks.Get(j)
 	if err != nil {
-		return zero.New[T](), fmt.Errorf("s.blocks.Get(i): %w", err)
+		return zero.New[T](), fmt.Errorf("s.blocks.Get(%d): %w", j, err)
 	}
 	y := block[j]
 	block[j] = x
@@ -79,6 +79,15 @@ func (s *RootishArrayStack[T]) Remove(i int) (T, error) {
 	}
 
 	return x, nil
+}
+
+func (s *RootishArrayStack[T]) Push(x T) {
+	// never occur ErrIndexOutOfRange, so we can ignore error
+	_ = s.Add(s.length, x)
+}
+
+func (s *RootishArrayStack[T]) Pop() (T, error) {
+	return s.Remove(s.length - 1)
 }
 
 func (s *RootishArrayStack[T]) rotateLeft(start, end int) {
