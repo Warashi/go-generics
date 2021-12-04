@@ -90,3 +90,21 @@ func (q *ArrayDequeue[T]) resize() {
 	q.start = 0
 	q.array = n
 }
+
+func (s *ArrayDequeue[T]) PushFront(x T) {
+	// never occur ErrIndexOutOfRange, so we can ignore error
+	_ = s.Add(0, x)
+}
+
+func (s *ArrayDequeue[T]) PopFront() (T, error) {
+	return s.Remove(0)
+}
+
+func (s *ArrayDequeue[T]) PushBack(x T) {
+	// never occur ErrIndexOutOfRange, so we can ignore error
+	_ = s.Add(s.length, x)
+}
+
+func (s *ArrayDequeue[T]) PopBack() (T, error) {
+	return s.Remove(s.length - 1)
+}
