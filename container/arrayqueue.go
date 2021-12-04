@@ -16,7 +16,7 @@ func (q *ArrayQueue[T]) Size() int {
 
 func (q *ArrayQueue[T]) resize() {
 	n := make([]T, minmax.Max(1, 2*q.length))
-	if q.array != nil {
+	if len(q.array) > 0 {
 		l := minmax.Min(q.length, len(q.array)-q.start)
 		copy(n[:l], q.array[q.start:])
 		copy(n[l:], q.array[:(q.start+q.length)%len(q.array)])

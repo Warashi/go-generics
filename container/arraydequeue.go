@@ -86,7 +86,7 @@ func (q *ArrayDequeue[T]) rotateRight(start, end int) {
 
 func (q *ArrayDequeue[T]) resize() {
 	n := make([]T, minmax.Max(1, 2*q.length))
-	if q.array != nil {
+	if len(q.array) > 0 {
 		l := minmax.Min(q.length, len(q.array)-q.start)
 		copy(n[:l], q.array[q.start:])
 		copy(n[l:], q.array[:(q.start+q.length)%len(q.array)])
