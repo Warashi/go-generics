@@ -151,3 +151,28 @@ func Flatten[T any](s Sequence[Sequence[T]]) Sequence[T] {
 		base: s,
 	}
 }
+
+type FilterSequence[T any] struct {
+	base   Sequence[T]
+	filter Applyer[T, bool]
+}
+
+func (s *FilterSequence[T]) Next() bool {
+	for s.base.Next() {
+		if s.filter.Apply(s.base.Value()) {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *FilterSequence[T]) Value() T {
+	return s.base.Value()
+}
+
+func Filter[T any](s Sequence[T], filter Applyer[T, bool]) Sequence[T] {
+	return &FilterSequence[T]{
+		base:   s,
+		filter: filter,
+	}
+}
