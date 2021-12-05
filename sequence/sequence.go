@@ -146,7 +146,7 @@ func (s *FlattenSequence[T]) Value() T {
 	return s.base.Value().Value()
 }
 
-func Flatten[T any](s Sequence[Sequence[T]]) *FlattenSequence[T] {
+func Flatten[T any](s Sequence[Sequence[T]]) Sequence[T] {
 	return &FlattenSequence[T]{
 		base: s,
 	}
