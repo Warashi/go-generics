@@ -69,7 +69,7 @@ func ForEach[T any](s Sequence[T], c Consumer[T]) {
 	}
 }
 
-func Consume[T any](s Sequence[T]) []T {
+func Collect[T any](s Sequence[T]) []T {
 	var v []T
 	for s.Next() {
 		v = append(v, s.Value())
