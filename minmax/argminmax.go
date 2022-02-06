@@ -1,7 +1,7 @@
 package minmax
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 func ArgMin[T constraints.Ordered](data []T) int {
