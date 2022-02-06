@@ -23,6 +23,9 @@ func Merge[T any](ctx context.Context, ch ...<-chan T) <-chan T {
 		left, right := ch[0], ch[1]
 	loop:
 		for {
+			if left == nil && right == nil {
+				return
+			}
 			select {
 			case <-ctx.Done():
 				return
@@ -46,9 +49,6 @@ func Merge[T any](ctx context.Context, ch ...<-chan T) <-chan T {
 					return
 				case ret <- v:
 				}
-			}
-			if left == nil && right == nil {
-				return
 			}
 		}
 	}()
