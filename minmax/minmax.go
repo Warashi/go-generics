@@ -1,7 +1,7 @@
 package minmax
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 
 	"github.com/Warashi/go-generics/zero"
 )
