@@ -8,6 +8,10 @@ test:
 build:
 	$(GO) build ./...
 
+.PHONY: fmt
+fmt:
+	$(GO) fmt ./...
+
 .PHONY: commit
 commit:
 	npx cz
