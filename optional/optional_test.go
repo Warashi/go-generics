@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/Warashi/go-generics/pointer"
+	"github.com/Warashi/go-generics/types"
 )
 
 func TestOptional_IsEmpty(t *testing.T) {
@@ -40,7 +41,7 @@ func TestOptional_IsEmpty(t *testing.T) {
 }
 
 func TestOptional_MapOrElseZero(t *testing.T) {
-	mapper := MapperFunc[int, string](strconv.Itoa)
+	mapper := types.ApplyerFunc[int, string](strconv.Itoa)
 	tests := []struct {
 		name  string
 		value *int
