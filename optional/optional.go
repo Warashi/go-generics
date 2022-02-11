@@ -51,5 +51,5 @@ func Map[F, T any](o Optional[F], f types.Applyer[F, T]) Optional[T] {
 }
 
 func FlatMap[F, T any](o Optional[F], f types.Applyer[F, Optional[T]]) Optional[T] {
-	return monad.FlatMap[T](MonadImpl[F, T]{}, o, f)
+	return monad.FlatMap(MonadImpl[F, T]{}, o, f)
 }
