@@ -41,7 +41,7 @@ func TestOptional_IsEmpty(t *testing.T) {
 }
 
 func TestOptional_MapOrElseZero(t *testing.T) {
-	mapper := types.ApplyerFunc[int, string](strconv.Itoa)
+	mapper := types.Closure[int, string](strconv.Itoa)
 	tests := []struct {
 		name  string
 		value *int
