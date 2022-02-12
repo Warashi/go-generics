@@ -8,7 +8,6 @@ import (
 
 var (
 	_ Sequence[any] = (*SliceSequence[any])(nil)
-	_ Sequence[any] = (*FlattenSequence[any])(nil)
 )
 
 type SliceSequence[T any] struct {
@@ -51,25 +50,8 @@ func Collect[T any](s Sequence[T]) []T {
 	return v
 }
 
-type FlattenSequence[T any] struct {
-	base Sequence[Sequence[T]]
-}
-
-func (s *FlattenSequence[T]) Next() bool {
-	for s.base.Value() == nil || !s.base.Value().Next() {
-		if ok := s.base.Next(); !ok {
-			return false
-		}
-	}
-	return true
-}
-func (s *FlattenSequence[T]) Value() T {
-	return s.base.Value().Value()
-}
 func Flatten[T any](s Sequence[Sequence[T]]) Sequence[T] {
-	return &FlattenSequence[T]{
-		base: s,
-	}
+	return FlatMap[Sequence[T], T](s, types.Identity[Sequence[T]]{})
 }
 
 func Map[F, T any](from Sequence[F], f types.Function[F, T]) Sequence[T] {
