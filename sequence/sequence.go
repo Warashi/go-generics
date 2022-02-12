@@ -1,14 +1,13 @@
 package sequence
 
 import (
+	"github.com/Warashi/go-generics/monad"
 	"github.com/Warashi/go-generics/types"
 	"github.com/Warashi/go-generics/zero"
 )
 
 var (
 	_ Sequence[any] = (*SliceSequence[any])(nil)
-	_ Sequence[any] = (*MapSequence[any, any])(nil)
-	_ Sequence[any] = (*FlatMapSequence[any, any])(nil)
 	_ Sequence[any] = (*FlattenSequence[any])(nil)
 )
 
@@ -44,70 +43,12 @@ type Sequence[T any] interface {
 	Value() T
 }
 
-func ForEach[T any](s Sequence[T], c types.Consumer[T]) {
-	for s.Next() {
-		c.Accept(s.Value())
-	}
-}
-
 func Collect[T any](s Sequence[T]) []T {
 	var v []T
 	for s.Next() {
 		v = append(v, s.Value())
 	}
 	return v
-}
-
-type MapSequence[T, R any] struct {
-	base     Sequence[T]
-	function types.Function[T, R]
-}
-
-func (s *MapSequence[T, R]) Next() bool {
-	return s.base.Next()
-}
-
-func (s *MapSequence[T, R]) Value() R {
-	return s.function.Apply(s.base.Value())
-}
-
-func Map[T, R any](s Sequence[T], f types.Function[T, R]) Sequence[R] {
-	return &MapSequence[T, R]{
-		base:     s,
-		function: f,
-	}
-}
-
-type FlatMapSequence[T, R any] struct {
-	base     Sequence[T]
-	current  Sequence[R]
-	function types.Function[T, Sequence[R]]
-}
-
-func (s *FlatMapSequence[T, R]) Next() bool {
-	for {
-		if s.current != nil && s.current.Next() {
-			return true
-		}
-		if !s.base.Next() {
-			return false
-		}
-		s.current = s.function.Apply(s.base.Value())
-	}
-}
-
-func (s *FlatMapSequence[T, R]) Value() R {
-	if s.current == nil {
-		return zero.New[R]()
-	}
-	return s.current.Value()
-}
-
-func FlatMap[T, R any](s Sequence[T], f types.Function[T, Sequence[R]]) Sequence[R] {
-	return &FlatMapSequence[T, R]{
-		base:     s,
-		function: f,
-	}
 }
 
 type FlattenSequence[T any] struct {
@@ -122,38 +63,24 @@ func (s *FlattenSequence[T]) Next() bool {
 	}
 	return true
 }
-
 func (s *FlattenSequence[T]) Value() T {
 	return s.base.Value().Value()
 }
-
 func Flatten[T any](s Sequence[Sequence[T]]) Sequence[T] {
 	return &FlattenSequence[T]{
 		base: s,
 	}
 }
 
-type FilterSequence[T any] struct {
-	base   Sequence[T]
-	filter types.Function[T, bool]
+func Map[F, T any](from Sequence[F], f types.Function[F, T]) Sequence[T] {
+	return monad.Map[Sequence[T]](MonadImpl[F, T]{}, from, f)
 }
-
-func (s *FilterSequence[T]) Next() bool {
-	for s.base.Next() {
-		if s.filter.Apply(s.base.Value()) {
-			return true
-		}
-	}
-	return false
+func FlatMap[F, T any](from Sequence[F], f types.Function[F, Sequence[T]]) Sequence[T] {
+	return monad.FlatMap(MonadImpl[F, T]{}, from, f)
 }
-
-func (s *FilterSequence[T]) Value() T {
-	return s.base.Value()
+func Filter[T any](from Sequence[T], f types.Function[T, bool]) Sequence[T] {
+	return monad.Filter(MonadImpl[T, T]{}, from, f)
 }
-
-func Filter[T any](s Sequence[T], filter types.Function[T, bool]) Sequence[T] {
-	return &FilterSequence[T]{
-		base:   s,
-		filter: filter,
-	}
+func ForEach[T any](from Sequence[T], f types.Consumer[T]) {
+	monad.Do[types.Void, Sequence[types.Void]](MonadImpl[T, types.Void]{}, from, f)
 }
