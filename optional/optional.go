@@ -46,10 +46,18 @@ func Empty[T any]() Optional[T] {
 	return Optional[T]{}
 }
 
-func Map[F, T any](o Optional[F], f types.Applyer[F, T]) Optional[T] {
+func Map[F, T any](o Optional[F], f types.Function[F, T]) Optional[T] {
 	return monad.Map[Optional[T]](MonadImpl[F, T]{}, o, f)
 }
 
-func FlatMap[F, T any](o Optional[F], f types.Applyer[F, Optional[T]]) Optional[T] {
+func FlatMap[F, T any](o Optional[F], f types.Function[F, Optional[T]]) Optional[T] {
 	return monad.FlatMap(MonadImpl[F, T]{}, o, f)
+}
+
+func Filter[T any](from Optional[T], f types.Function[T, bool]) Optional[T] {
+	return monad.Filter(MonadImpl[T, T]{}, from, f)
+}
+
+func IfPresent[T any](from Optional[T], f types.Consumer[T]) {
+	monad.Do[types.Void, Optional[types.Void]](MonadImpl[T, types.Void]{}, from, f)
 }

@@ -14,7 +14,7 @@ func (MonadImpl[T, U]) Unit(value U) <-chan U {
 	return ch
 }
 
-func (MonadImpl[T, U]) Bind(src <-chan T, f types.Applyer[T, <-chan U]) <-chan U {
+func (MonadImpl[T, U]) Bind(src <-chan T, f types.Function[T, <-chan U]) <-chan U {
 	result := make(chan U)
 	go func() {
 		defer close(result)
