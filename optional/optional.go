@@ -15,7 +15,7 @@ func (o Optional[T]) Equal(o2 Optional[T]) bool {
 		return true
 	}
 	if !o.IsEmpty() && !o2.IsEmpty() {
-		return cmp.Equal(o.OrElseZero(), o2.OrElseZero(), cmpopts.IgnoreUnexported())
+		return cmp.Equal(*o.value, *o2.value, cmpopts.IgnoreUnexported())
 	}
 	return false
 }
