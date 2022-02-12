@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/Warashi/go-generics/sequence"
+	"github.com/Warashi/go-generics/types"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -21,7 +22,7 @@ func TestOf(t *testing.T) {
 }
 
 func TestMap(t *testing.T) {
-	type f = sequence.ApplyerFunc[int, int]
+	type f = types.Closure[int, int]
 	s := sequence.Map[int, int](
 		sequence.Of(0, 1, 2),
 		f(func(x int) int { return x + 1 }),
@@ -55,7 +56,7 @@ func TestFlatten(t *testing.T) {
 }
 
 func TestMapSlice(t *testing.T) {
-	type f = sequence.ApplyerFunc[int, sequence.Sequence[int]]
+	type f = types.Closure[int, sequence.Sequence[int]]
 	s := sequence.Map[int, sequence.Sequence[int]](
 		sequence.Of(0, 1, 2),
 		f(func(i int) sequence.Sequence[int] { return sequence.Of(i, i*2) }),
@@ -72,7 +73,7 @@ func TestMapSlice(t *testing.T) {
 }
 
 func TestFlatMap(t *testing.T) {
-	type f = sequence.ApplyerFunc[int, sequence.Sequence[int]]
+	type f = types.Closure[int, sequence.Sequence[int]]
 	s := sequence.FlatMap[int, int](
 		sequence.Of(0, 1, 2),
 		f(func(i int) sequence.Sequence[int] { return sequence.Of(i, i*2) }),
@@ -89,7 +90,7 @@ func TestFlatMap(t *testing.T) {
 }
 
 func TestFilter(t *testing.T) {
-	type f = sequence.ApplyerFunc[int, bool]
+	type f = types.Closure[int, bool]
 	s := sequence.Filter[int](
 		sequence.Of(0, 1, 2, 3, 4, 5, 6),
 		f(func(i int) bool { return i%2 == 0 }),

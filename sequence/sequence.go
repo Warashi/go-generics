@@ -2,6 +2,7 @@ package sequence
 
 import (
 	"github.com/Warashi/go-generics/zero"
+	"github.com/Warashi/go-generics/types"
 )
 
 var (
@@ -43,29 +44,9 @@ type Sequence[T any] interface {
 	Value() T
 }
 
-type Applyer[T, R any] interface {
-	Apply(T) R
-}
-
-type ApplyerFunc[T, R any] func(T) R
-
-func (f ApplyerFunc[T, R]) Apply(v T) R {
-	return f(v)
-}
-
-type Consumer[T any] interface {
-	Consume(T)
-}
-
-type ConsumerFunc[T any] func(T)
-
-func (f ConsumerFunc[T]) Consume(v T) {
-	f(v)
-}
-
-func ForEach[T any](s Sequence[T], c Consumer[T]) {
+func ForEach[T any](s Sequence[T], c types.Consumer[T]) {
 	for s.Next() {
-		c.Consume(s.Value())
+		c.Accept(s.Value())
 	}
 }
 
@@ -79,7 +60,7 @@ func Collect[T any](s Sequence[T]) []T {
 
 type MapSequence[T, R any] struct {
 	base    Sequence[T]
-	applyer Applyer[T, R]
+	function types.Function[T, R]
 }
 
 func (s *MapSequence[T, R]) Next() bool {
@@ -87,20 +68,20 @@ func (s *MapSequence[T, R]) Next() bool {
 }
 
 func (s *MapSequence[T, R]) Value() R {
-	return s.applyer.Apply(s.base.Value())
+	return s.function.Apply(s.base.Value())
 }
 
-func Map[T, R any](s Sequence[T], a Applyer[T, R]) Sequence[R] {
+func Map[T, R any](s Sequence[T], f types.Function[T, R]) Sequence[R] {
 	return &MapSequence[T, R]{
 		base:    s,
-		applyer: a,
+		function: f,
 	}
 }
 
 type FlatMapSequence[T, R any] struct {
 	base    Sequence[T]
 	current Sequence[R]
-	applyer Applyer[T, Sequence[R]]
+	function types.Function[T, Sequence[R]]
 }
 
 func (s *FlatMapSequence[T, R]) Next() bool {
@@ -111,7 +92,7 @@ func (s *FlatMapSequence[T, R]) Next() bool {
 		if !s.base.Next() {
 			return false
 		}
-		s.current = s.applyer.Apply(s.base.Value())
+		s.current = s.function.Apply(s.base.Value())
 	}
 }
 
@@ -122,10 +103,10 @@ func (s *FlatMapSequence[T, R]) Value() R {
 	return s.current.Value()
 }
 
-func FlatMap[T, R any](s Sequence[T], a Applyer[T, Sequence[R]]) Sequence[R] {
+func FlatMap[T, R any](s Sequence[T], f types.Function[T, Sequence[R]]) Sequence[R] {
 	return &FlatMapSequence[T, R]{
 		base:    s,
-		applyer: a,
+		function: f,
 	}
 }
 
@@ -154,7 +135,7 @@ func Flatten[T any](s Sequence[Sequence[T]]) Sequence[T] {
 
 type FilterSequence[T any] struct {
 	base   Sequence[T]
-	filter Applyer[T, bool]
+	filter types.Function[T, bool]
 }
 
 func (s *FilterSequence[T]) Next() bool {
@@ -170,7 +151,7 @@ func (s *FilterSequence[T]) Value() T {
 	return s.base.Value()
 }
 
-func Filter[T any](s Sequence[T], filter Applyer[T, bool]) Sequence[T] {
+func Filter[T any](s Sequence[T], filter types.Function[T, bool]) Sequence[T] {
 	return &FilterSequence[T]{
 		base:   s,
 		filter: filter,
