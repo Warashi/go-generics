@@ -66,7 +66,7 @@ func TestMapSlice(t *testing.T) {
 		if ok := s.Next(); !ok {
 			t.Fatalf("s.Next() = %v, want %v", ok, true)
 		}
-		if v := s.Value(); !cmp.Equal(sequence.Collect(v), want) {
+		if v := sequence.Collect(s.Value()); !cmp.Equal(v, want) {
 			t.Fatalf("s.Value() = %v, want %v", v, want)
 		}
 	}
