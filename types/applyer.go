@@ -3,7 +3,13 @@ package types
 var (
 	_ Function[int, bool]           = Closure[int, bool](nil)
 	_ BiFunction[int, string, bool] = BiClosure[int, string, bool](nil)
+
+	_ Function[int, int] = Identity[int]{}
 )
+
+type Identity[T any] struct{}
+
+func (Identity[T]) Apply(v T) T { return v }
 
 type Function[F, T any] interface {
 	Apply(F) T
