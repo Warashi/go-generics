@@ -1,8 +1,8 @@
 package sequence
 
 import (
-	"github.com/Warashi/go-generics/zero"
 	"github.com/Warashi/go-generics/types"
+	"github.com/Warashi/go-generics/zero"
 )
 
 var (
@@ -59,7 +59,7 @@ func Collect[T any](s Sequence[T]) []T {
 }
 
 type MapSequence[T, R any] struct {
-	base    Sequence[T]
+	base     Sequence[T]
 	function types.Function[T, R]
 }
 
@@ -73,14 +73,14 @@ func (s *MapSequence[T, R]) Value() R {
 
 func Map[T, R any](s Sequence[T], f types.Function[T, R]) Sequence[R] {
 	return &MapSequence[T, R]{
-		base:    s,
+		base:     s,
 		function: f,
 	}
 }
 
 type FlatMapSequence[T, R any] struct {
-	base    Sequence[T]
-	current Sequence[R]
+	base     Sequence[T]
+	current  Sequence[R]
 	function types.Function[T, Sequence[R]]
 }
 
@@ -105,7 +105,7 @@ func (s *FlatMapSequence[T, R]) Value() R {
 
 func FlatMap[T, R any](s Sequence[T], f types.Function[T, Sequence[R]]) Sequence[R] {
 	return &FlatMapSequence[T, R]{
-		base:    s,
+		base:     s,
 		function: f,
 	}
 }
