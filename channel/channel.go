@@ -1,8 +1,8 @@
 package channel
 
 import (
-  "github.com/Warashi/go-generics/monad"
-  "github.com/Warashi/go-generics/types"
+	"github.com/Warashi/go-generics/monad"
+	"github.com/Warashi/go-generics/types"
 )
 
 func Map[F, T any](from <-chan F, f types.Function[F, T]) <-chan T {
