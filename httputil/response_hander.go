@@ -8,8 +8,8 @@ import (
 )
 
 type (
-	handler[T any]          func(ctx context.Context, statusCode int, response *http.Response) (T, error)
-	Option[T any]           func(responseHandler *ResponseHandler[T])
+	Handler[T any]          func(ctx context.Context, statusCode int, response *http.Response) (T, error)
+	HandlerOption[T any]    func(responseHandler *ResponseHandler[T])
 	HandlerInterface[T any] interface {
 		Handle2xx(context.Context, int, *http.Response) (T, error)
 		Handle4xx(context.Context, int, *http.Response) (T, error)
@@ -20,31 +20,31 @@ type (
 
 func noop[T any](_ context.Context, _ int, _ *http.Response) (T, error) { return zero.New[T](), nil }
 
-func WithHandle2xx[T any](h handler[T]) Option[T] {
+func WithHandle2xx[T any](h Handler[T]) HandlerOption[T] {
 	return func(responseHandler *ResponseHandler[T]) {
 		responseHandler.handle2xx = h
 	}
 }
 
-func WithHandle4xx[T any](h handler[T]) Option[T] {
+func WithHandle4xx[T any](h Handler[T]) HandlerOption[T] {
 	return func(responseHandler *ResponseHandler[T]) {
 		responseHandler.handle4xx = h
 	}
 }
 
-func WithHandle5xx[T any](h handler[T]) Option[T] {
+func WithHandle5xx[T any](h Handler[T]) HandlerOption[T] {
 	return func(responseHandler *ResponseHandler[T]) {
 		responseHandler.handle5xx = h
 	}
 }
 
-func WithHandleOthers[T any](h handler[T]) Option[T] {
+func WithHandleOthers[T any](h Handler[T]) HandlerOption[T] {
 	return func(responseHandler *ResponseHandler[T]) {
 		responseHandler.handleOthers = h
 	}
 }
 
-func WithInterface[T any](i HandlerInterface[T]) Option[T] {
+func WithInterface[T any](i HandlerInterface[T]) HandlerOption[T] {
 	return func(responseHandler *ResponseHandler[T]) {
 		responseHandler.handle2xx = i.Handle2xx
 		responseHandler.handle4xx = i.Handle4xx
@@ -53,7 +53,7 @@ func WithInterface[T any](i HandlerInterface[T]) Option[T] {
 	}
 }
 
-func NewResponseHandler[T any](opts ...Option[T]) *ResponseHandler[T] {
+func NewResponseHandler[T any](opts ...HandlerOption[T]) *ResponseHandler[T] {
 	h := &ResponseHandler[T]{
 		handle2xx:    noop[T],
 		handle4xx:    noop[T],
@@ -67,10 +67,10 @@ func NewResponseHandler[T any](opts ...Option[T]) *ResponseHandler[T] {
 }
 
 type ResponseHandler[T any] struct {
-	handle2xx    handler[T]
-	handle4xx    handler[T]
-	handle5xx    handler[T]
-	handleOthers handler[T]
+	handle2xx    Handler[T]
+	handle4xx    Handler[T]
+	handle5xx    Handler[T]
+	handleOthers Handler[T]
 }
 
 func (h *ResponseHandler[T]) Handle(ctx context.Context, response *http.Response) (T, error) {
