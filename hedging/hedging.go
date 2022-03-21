@@ -5,19 +5,20 @@ import (
 	"time"
 )
 
+type result[T any] struct {
+	value T
+	err   error
+}
+
 func Hedge[T any](delay time.Duration, f func() (T, error)) (T, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	type result struct {
-		value T
-		err   error
-	}
 
-	ch1, ch2 := make(chan result, 1), make(chan result, 1)
+	ch1, ch2 := make(chan result[T], 1), make(chan result[T], 1)
 
 	go func() {
 		defer close(ch1)
-		var r result
+		var r result[T]
 		r.value, r.err = f()
 		ch1 <- r
 	}()
@@ -28,7 +29,7 @@ func Hedge[T any](delay time.Duration, f func() (T, error)) (T, error) {
 			return
 		case <-time.After(delay):
 		}
-		var r result
+		var r result[T]
 		r.value, r.err = f()
 		ch2 <- r
 	}()
