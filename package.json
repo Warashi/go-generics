@@ -21,13 +21,15 @@
   "devDependencies": {
     "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^14.1.0",
+    "@commitlint/cz-commitlint": "^17.7.1",
+    "@commitlint/types": "^17.4.4",
+    "@types/node": "^20.5.1",
     "commitizen": "^4.2.4",
-    "cz-conventional-changelog": "^3.3.0",
     "husky": "^7.0.0"
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "@commitlint/cz-commitlint"
     }
   }
 }
