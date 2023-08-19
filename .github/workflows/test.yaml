@@ -5,7 +5,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup go
-        run: curl -sL https://raw.githubusercontent.com/maxatome/install-go/v3.0/install-go.pl | perl - tip $HOME/go
-      - uses: actions/checkout@v2
+      - name: Setup Go environment
+        uses: actions/setup-go@v4.1.0
+        with:
+          go-version: 'stable'
+      - uses: actions/checkout@v3.5.3
       - run: go test ./...
