@@ -103,7 +103,7 @@ func (r *SliceReader[T]) WriteTo(w Writer[T]) (n int64, err error) {
 	b := r.s[r.i:]
 	m, err := w.Write(b)
 	if m > len(b) {
-		panic("bytes.Reader.WriteTo: invalid Write count")
+		panic("genio.SliceReader.WriteTo: invalid Write count")
 	}
 	r.i += int64(m)
 	n = int64(m)
