@@ -25,24 +25,24 @@ var ErrInvalidWrite = errors.New("invalid write result")
 
 // Reader is the interface that wraps the basic Read method.
 //
-// Read reads up to len(p) bytes into p. It returns the number of bytes
+// Read reads up to len(p) elements into p. It returns the number of elements
 // read (0 <= n <= len(p)) and any error encountered. Even if Read
 // returns n < len(p), it may use all of p as scratch space during the call.
-// If some data is available but not len(p) bytes, Read conventionally
+// If some data is available but not len(p) elements, Read conventionally
 // returns what is available instead of waiting for more.
 //
 // When Read encounters an error or end-of-file condition after
-// successfully reading n > 0 bytes, it returns the number of
-// bytes read. It may return the (non-nil) error from the same call
+// successfully reading n > 0 elements, it returns the number of
+// elements read. It may return the (non-nil) error from the same call
 // or return the error (and n == 0) from a subsequent call.
 // An instance of this general case is that a Reader returning
-// a non-zero number of bytes at the end of the input stream may
+// a non-zero number of elements at the end of the input stream may
 // return either err == EOF or err == nil. The next Read should
 // return 0, EOF.
 //
-// Callers should always process the n > 0 bytes returned before
+// Callers should always process the n > 0 elements returned before
 // considering the error err. Doing so correctly handles I/O errors
-// that happen after reading some bytes and also both of the
+// that happen after reading some elements and also both of the
 // allowed EOF behaviors.
 //
 // If len(p) == 0, Read should always return n == 0. It may return a
@@ -60,8 +60,8 @@ type Reader[T any] interface {
 
 // Writer is the interface that wraps the basic Write method.
 //
-// Write writes len(p) bytes from p to the underlying data stream.
-// It returns the number of bytes written from p (0 <= n <= len(p))
+// Write writes len(p) elements from p to the underlying data stream.
+// It returns the number of elements written from p (0 <= n <= len(p))
 // and any error encountered that caused the write to stop early.
 // Write must return a non-nil error if it returns n < len(p).
 // Write must not modify the slice data, even temporarily.
@@ -391,7 +391,7 @@ func (l *LimitedReader[T]) Read(p []T) (n int, err error) {
 
 
 // NewSectionReader returns a SectionReader that reads from r
-// starting at offset off and stops with EOF after n bytes.
+// starting at offset off and stops with EOF after n elements.
 func NewSectionReader[T any](r ReaderAt[T], off int64, n int64) *SectionReader[T] {
 	var remaining int64
 	const maxint64 = 1<<63 - 1
@@ -463,7 +463,7 @@ func (s *SectionReader[T]) ReadAt(p []T, off int64) (n int, err error) {
 	return s.r.ReadAt(p, off)
 }
 
-// Size returns the size of the section in bytes.
+// Size returns the size of the section in elements.
 func (s *SectionReader[T]) Size() int64 { return s.limit - s.base }
 
 // An OffsetWriter maps writes at offset base to offset base+off in the underlying writer.
