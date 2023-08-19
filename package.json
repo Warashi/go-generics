@@ -24,7 +24,7 @@
     "@commitlint/cz-commitlint": "^17.7.1",
     "@commitlint/types": "^17.4.4",
     "@types/node": "^20.5.1",
-    "commitizen": "^4.2.4",
+    "commitizen": "^4.3.0",
     "husky": "^7.0.0"
   },
   "config": {
