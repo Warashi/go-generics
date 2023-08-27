@@ -41,8 +41,8 @@ type JSONEncoder[T any] struct {
 
 // Read implements the io.Reader interface.
 func (r *JSONEncoder[T]) Read(p []byte) (n int, err error) {
-  var b [1]T
-  nn, err := r.r.Read(b[:])
+	var b [1]T
+	nn, err := r.r.Read(b[:])
 	if err != nil {
 		return 0, err
 	}
@@ -58,8 +58,8 @@ func (r *JSONEncoder[T]) Read(p []byte) (n int, err error) {
 		r.buf = append(r.buf, b...)
 	}
 
-  n = copy(p, r.buf)
-  r.buf = r.buf[n:]
+	n = copy(p, r.buf)
+	r.buf = r.buf[n:]
 
-  return n, nil
+	return n, nil
 }

@@ -107,7 +107,7 @@ type ReadSeeker[T any] interface {
 type ReadSeekCloser[T any] interface {
 	Reader[T]
 	io.Seeker
-  io.Closer
+	io.Closer
 }
 
 // WriteSeeker is the interface that groups the basic Write and Seek methods.
@@ -388,7 +388,6 @@ func (l *LimitedReader[T]) Read(p []T) (n int, err error) {
 	l.N -= int64(n)
 	return
 }
-
 
 // NewSectionReader returns a SectionReader that reads from r
 // starting at offset off and stops with EOF after n elements.

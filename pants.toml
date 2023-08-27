@@ -1,0 +1,7 @@
+[GLOBAL]
+pants_version = "2.16.0"
+backend_packages = ["pants.backend.experimental.go"]
+
+[anonymous-telemetry]
+enabled = true
+repo_id = "7db7cc82-7912-4acd-8c52-f2be158f2504"
