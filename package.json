@@ -20,7 +20,7 @@
   "homepage": "https://github.com/Warashi/go-algorithms#readme",
   "devDependencies": {
     "@commitlint/cli": "^17.8.0",
-    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/config-conventional": "^17.8.0",
     "@commitlint/cz-commitlint": "^17.8.0",
     "@commitlint/types": "^17.4.4",
     "@types/node": "^20.8.6",
