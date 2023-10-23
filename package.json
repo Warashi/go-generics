@@ -21,7 +21,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.0.0",
     "@commitlint/config-conventional": "^18.0.0",
-    "@commitlint/cz-commitlint": "^17.8.0",
+    "@commitlint/cz-commitlint": "^18.0.0",
     "@commitlint/types": "^18.0.0",
     "@types/node": "^20.8.7",
     "commitizen": "^4.3.0",
