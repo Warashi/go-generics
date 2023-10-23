@@ -22,7 +22,7 @@
     "@commitlint/cli": "^17.8.0",
     "@commitlint/config-conventional": "^17.8.0",
     "@commitlint/cz-commitlint": "^17.8.0",
-    "@commitlint/types": "^17.4.4",
+    "@commitlint/types": "^18.0.0",
     "@types/node": "^20.8.6",
     "commitizen": "^4.3.0",
     "husky": "^8.0.3"
