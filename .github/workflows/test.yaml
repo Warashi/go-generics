@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go environment
-        uses: actions/setup-go@v4.1.0
+        uses: actions/setup-go@v5.0.0
         with:
           go-version: 'stable'
       - uses: actions/checkout@v4.1.1
