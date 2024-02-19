@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Warashi/go-algorithms#readme",
   "devDependencies": {
-    "@commitlint/cli": "^18.4.3",
+    "@commitlint/cli": "^18.6.1",
     "@commitlint/config-conventional": "^18.4.3",
     "@commitlint/cz-commitlint": "^18.4.3",
     "@commitlint/types": "^18.4.3",
